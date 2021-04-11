@@ -37,3 +37,24 @@ ods_traffic = DataProcHiveOperator(
     params={"job_suffix": randint(0, 100000)},
     region='europe-west3',
 )
+
+dm_traffic = DataProcHiveOperator(
+    task_id='dm_traffic',
+    dag=dag,
+    query="""
+        INSERT OVERWRITE TABLE asamoilov.dm_traffic PARTITION (year = {{ execution_date.year }})
+        SELECT user_id,
+            min(bytes_received) AS bytes_received_min,
+            max(bytes_received) AS bytes_received_max,
+            avg(bytes_received) AS bytes_received_avg
+        FROM asamoilov.ods_traffic
+        WHERE year = {{ execution_date.year }}
+        GROUP BY user_id;
+    """,
+    cluster_name='cluster-dataproc',
+    job_name=USERNAME + '_dm_traffic_{{ execution_date.year }}_{{ params.job_suffix }}',
+    params={"job_suffix": randint(0, 100000)},
+    region='europe-west3',
+)
+
+ods_traffic >> dm_traffic
