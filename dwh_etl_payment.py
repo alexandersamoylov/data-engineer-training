@@ -92,7 +92,7 @@ dds_hub_billing_period = PostgresOperator(
 
 all_hub_loaded = DummyOperator(task_id="all_hub_loaded", dag=dag)
 
-start_load >> dds_hub_payment >> all_hub_loaded
+start_load >> dds_hub_user >> all_hub_loaded
 start_load >> dds_hub_account >> all_hub_loaded
 start_load >> dds_hub_billing_period >> all_hub_loaded
 
