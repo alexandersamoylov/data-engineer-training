@@ -109,7 +109,7 @@ SQL_DM_PAYMENT_REPORT_FCT = """
 DELETE FROM asamoilov.dm_payment_report_fct 
 WHERE billing_year_id = (
         SELECT billing_year_id 
-        FROM dm_payment_report_dim_billing_year
+        FROM asamoilov.dm_payment_report_dim_billing_year
         WHERE billing_year_key = {{ execution_date.year }}
     );
 
