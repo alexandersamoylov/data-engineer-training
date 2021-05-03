@@ -20,7 +20,7 @@ dag = DAG(
 )
 
 SQL_DM_PAYMENT_REPORT_TMP = """
-DROP TABLE IF EXISTS asamoilov.dm_payment_report_tmp;
+DROP TABLE IF EXISTS asamoilov.dm_payment_report_tmp_{{ execution_date.year }};
 
 CREATE TABLE asamoilov.dm_payment_report_tmp_{{ execution_date.year }} AS
 WITH source_payment AS (
