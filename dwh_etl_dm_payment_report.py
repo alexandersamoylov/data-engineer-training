@@ -185,5 +185,12 @@ drop_dm_payment_report_tmp = PostgresOperator(
 
 all_loaded = DummyOperator(task_id="all_loaded", dag=dag)
 
-start_load >> dm_payment_report_tmp >> dm_payment_report_dim_billing_year >> dm_payment_report_dim_legal_type >> dm_payment_report_dim_district >> dm_payment_report_dim_registration_year >> dm_payment_report_fct >> drop_dm_payment_report_tmp >> all_loaded
+start_load >> dm_payment_report_tmp 
+
+dm_payment_report_tmp >> dm_payment_report_dim_billing_year >> dm_payment_report_fct
+dm_payment_report_tmp >> dm_payment_report_dim_legal_type >> dm_payment_report_fct
+dm_payment_report_tmp >> dm_payment_report_dim_district >> dm_payment_report_fct
+dm_payment_report_tmp >> dm_payment_report_dim_registration_year >> dm_payment_report_fct
+
+dm_payment_report_fct >> drop_dm_payment_report_tmp >> all_loaded
 
