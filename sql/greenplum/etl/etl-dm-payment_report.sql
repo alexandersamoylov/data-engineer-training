@@ -1,5 +1,7 @@
 -- DM_PAYMENT_REPORT_TMP
 
+DROP TABLE IF EXISTS asamoilov.dm_payment_report_tmp;
+
 CREATE TABLE asamoilov.dm_payment_report_tmp AS
 WITH source_payment AS (
     SELECT

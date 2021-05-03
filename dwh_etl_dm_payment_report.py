@@ -20,7 +20,9 @@ dag = DAG(
 )
 
 SQL_DM_PAYMENT_REPORT_TMP = """
-CREATE TABLE asamoilov.dm_payment_report_tmp AS
+DROP TABLE IF EXISTS asamoilov.dm_payment_report_tmp;
+
+CREATE TABLE asamoilov.dm_payment_report_tmp_{{ execution_date.year }} AS
 WITH source_payment AS (
     SELECT
         s0.user_pk,
@@ -76,7 +78,7 @@ GROUP BY sp.billing_year_key, su.legal_type_key, su.district_key, su.registratio
 SQL_DM_PAYMENT_REPORT_DIM_BILLING_YEAR = """
 INSERT INTO asamoilov.dm_payment_report_dim_billing_year(billing_year_key)
 SELECT DISTINCT s.billing_year_key
-FROM asamoilov.dm_payment_report_tmp s
+FROM asamoilov.dm_payment_report_tmp_{{ execution_date.year }} s
 LEFT JOIN asamoilov.dm_payment_report_dim_billing_year d ON s.billing_year_key = d.billing_year_key
 WHERE d.billing_year_key IS NULL;
 """
@@ -84,7 +86,7 @@ WHERE d.billing_year_key IS NULL;
 SQL_DM_PAYMENT_REPORT_DIM_LEGAL_TYPE = """
 INSERT INTO asamoilov.dm_payment_report_dim_legal_type(legal_type_key)
 SELECT DISTINCT s.legal_type_key
-FROM asamoilov.dm_payment_report_tmp s
+FROM asamoilov.dm_payment_report_tmp_{{ execution_date.year }} s
 LEFT JOIN asamoilov.dm_payment_report_dim_legal_type d ON s.legal_type_key = d.legal_type_key
 WHERE d.legal_type_key IS NULL;
 """
@@ -92,7 +94,7 @@ WHERE d.legal_type_key IS NULL;
 SQL_DM_PAYMENT_REPORT_DIM_DISTRICT = """
 INSERT INTO asamoilov.dm_payment_report_dim_district(district_key)
 SELECT DISTINCT s.district_key
-FROM asamoilov.dm_payment_report_tmp s
+FROM asamoilov.dm_payment_report_tmp_{{ execution_date.year }} s
 LEFT JOIN asamoilov.dm_payment_report_dim_district d ON s.district_key = d.district_key
 WHERE d.district_key IS NULL;
 """
@@ -100,7 +102,7 @@ WHERE d.district_key IS NULL;
 SQL_DM_PAYMENT_REPORT_DIM_REGISTRATION_YEAR = """
 INSERT INTO asamoilov.dm_payment_report_dim_registration_year(registration_year_key)
 SELECT DISTINCT s.registration_year_key
-FROM asamoilov.dm_payment_report_tmp s
+FROM asamoilov.dm_payment_report_tmp_{{ execution_date.year }} s
 LEFT JOIN asamoilov.dm_payment_report_dim_registration_year d ON s.registration_year_key = d.registration_year_key
 WHERE d.registration_year_key IS NULL;
 """
@@ -121,7 +123,7 @@ SELECT
     dry.registration_year_id,
     s.is_vip,
     s.sum
-FROM asamoilov.dm_payment_report_tmp s
+FROM asamoilov.dm_payment_report_tmp_{{ execution_date.year }} s
 JOIN asamoilov.dm_payment_report_dim_billing_year dby ON s.billing_year_key = dby.billing_year_key
 JOIN asamoilov.dm_payment_report_dim_legal_type dlt ON s.legal_type_key = dlt.legal_type_key
 JOIN asamoilov.dm_payment_report_dim_district dd ON s.district_key = dd.district_key
@@ -129,7 +131,7 @@ JOIN asamoilov.dm_payment_report_dim_registration_year dry ON s.registration_yea
 """
 
 SQL_DROP_DM_PAYMENT_REPORT_TMP = """
-DROP TABLE IF EXISTS asamoilov.dm_payment_report_tmp;
+DROP TABLE IF EXISTS asamoilov.dm_payment_report_tmp_{{ execution_date.year }};
 """
 
 start_load = DummyOperator(task_id="start_load", dag=dag)
