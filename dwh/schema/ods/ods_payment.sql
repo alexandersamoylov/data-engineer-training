@@ -10,7 +10,7 @@ CREATE TABLE asamoilov.ods_payment(
     phone text,
     billing_period date,
     pay_date timestamp without time zone,
-    sum decimal(10,2),
+    payment_sum decimal(10,2),
     date_part_year smallint
 ) DISTRIBUTED BY (user_id);
 
@@ -42,13 +42,13 @@ SELECT
     cast(md5(concat_ws('||',
         coalesce(nullif(upper(trim(cast(pay_doc_type AS varchar))), ''), '^^'),
         coalesce(nullif(upper(trim(cast(pay_doc_num AS varchar))), ''), '^^'),
-        coalesce(nullif(upper(trim(cast(sum AS varchar))), ''), '^^'),
+        coalesce(nullif(upper(trim(cast(payment_sum AS varchar))), ''), '^^'),
         coalesce(nullif(upper(trim(cast(pay_date AS varchar))), ''), '^^')
     )) AS TEXT) AS payment_hashdiff,
 
     pay_doc_type,
     pay_doc_num,
-    sum,
+    payment_sum,
 
     pay_date AS effective_from,
 

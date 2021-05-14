@@ -7,7 +7,7 @@ CREATE TABLE asamoilov.dds_sat_payment_details(
     payment_hashdiff text,
     pay_doc_type text,
     pay_doc_num bigint,
-    sum decimal(10,2),
+    payment_sum decimal(10,2),
     effective_from timestamp without time zone,
     load_date timestamp with time zone,
     record_source text
