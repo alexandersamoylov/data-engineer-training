@@ -208,7 +208,7 @@ SELECT sd0.user_pk,
     sd0.load_date,
     sd0.record_source
 FROM source_data sd0
-LEFT JOIN update_records ud0 ON sd0.user_pk = ud0.user_pk
+LEFT JOIN update_data ud0 ON sd0.user_pk = ud0.user_pk
     AND sd0.user_hashdiff = ud0.user_hashdiff
 WHERE ud0.user_hashdiff IS NULL OR sd0.effective_from > ud0.effective_to;
 """
