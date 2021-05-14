@@ -290,7 +290,7 @@ dds_link_payment = PostgresOperator(
     sql = SQL_DDS_LINK_PAYMENT
 )
 
-dds_sat_user_pgone = PostgresOperator(
+dds_sat_user_phone = PostgresOperator(
     task_id = "dds_sat_user_phone",
     dag = dag,
     # postgres_conn_id="postgres_default",
