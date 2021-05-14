@@ -1,5 +1,25 @@
--- ods_mdm_user
+from datetime import timedelta, datetime
 
+from airflow import DAG
+from airflow.operators.postgres_operator import PostgresOperator
+from airflow.operators.dummy_operator import DummyOperator
+
+USERNAME = 'asamoilov'
+
+default_args = {
+    'owner': USERNAME,
+    'start_date': datetime(2012, 1, 1, 0, 0, 0)
+}
+
+dag = DAG(
+    USERNAME + '_dwh_etl_mdm_user',
+    default_args = default_args,
+    description = 'DWH ETL tasks',
+    schedule_interval = "0 0 1 1 *",
+    max_active_runs = 1
+)
+
+SQL_ODS_MDM_USER="""
 TRUNCATE asamoilov.ods_mdm_user;
 
 INSERT INTO asamoilov.ods_mdm_user
@@ -11,10 +31,9 @@ SELECT
     billing_mode AS billing_mode,
     is_vip AS is_vip
 FROM mdm.user;
+"""
 
-
--- dds_hub_user
-
+SQL_DDS_HUB_USER="""
 INSERT INTO asamoilov.dds_hub_user
 WITH source_data AS (
     SELECT
@@ -41,10 +60,9 @@ SELECT sd0.user_pk,
 FROM source_data sd0
 LEFT JOIN asamoilov.dds_hub_user ud0 ON sd0.user_pk = ud0.user_pk
 WHERE ud0.user_pk IS NULL;
+"""
 
-
--- dds_sat_user_mdm
-
+SQL_DDS_SAT_USER_MDM="""
 INSERT INTO asamoilov.dds_sat_user_mdm
 WITH source_data AS (
     SELECT 
@@ -87,4 +105,35 @@ FROM source_data sd0
 LEFT JOIN asamoilov.dds_sat_user_mdm ud0 ON sd0.user_pk = ud0.user_pk
     AND sd0.user_hashdiff = ud0.user_hashdiff
 WHERE ud0.user_hashdiff IS NULL;
+"""
+
+start_load = DummyOperator(task_id="start_load", dag=dag)
+
+ods_mdm_user = PostgresOperator(
+    task_id = "ods_mdm_user",
+    dag = dag,
+    # postgres_conn_id="postgres_default",
+    sql = SQL_ODS_MDM_USER
+)
+
+dds_hub_user = PostgresOperator(
+    task_id = "dds_hub_user",
+    dag = dag,
+    # postgres_conn_id="postgres_default",
+    sql = SQL_DDS_HUB_USER
+)
+
+dds_sat_user_mdm = PostgresOperator(
+    task_id = "dds_sat_user_mdm",
+    dag = dag,
+    # postgres_conn_id="postgres_default",
+    sql = SQL_DDS_SAT_USER_MDM
+)
+
+all_loaded = DummyOperator(task_id="all_loaded", dag=dag)
+
+start_load >> ods_mdm_user 
+
+ods_mdm_user >> dds_hub_user >> all_loaded
+ods_mdm_user >> dds_sat_user_mdm >> all_loaded
 
