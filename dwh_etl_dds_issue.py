@@ -196,7 +196,7 @@ dds_sat_issue_details = PostgresOperator(
     task_id = "dds_sat_issue_details",
     dag = dag,
     # postgres_conn_id="postgres_default",
-    sql = SQL_DDS_SAT_BILLING_DETAILS
+    sql = SQL_DDS_SAT_ISSUE_DETAILS
 )
 
 all_loaded = DummyOperator(task_id="all_loaded", dag=dag)
