@@ -1,0 +1,13 @@
+name: ods_payment
+config_version:
+module_name: great_expectations.checkpoint
+class_name: LegacyCheckpoint
+validation_operator_name:
+batches:
+  - batch_kwargs:
+      table: ods_payment
+      schema: asamoilov
+      data_asset_name: asamoilov.ods_payment
+      datasource: greenplum
+    expectation_suite_names:
+      - asamoilov.ods_payment.warning

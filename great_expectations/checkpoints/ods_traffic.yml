@@ -1,0 +1,13 @@
+name: ods_traffic
+config_version:
+module_name: great_expectations.checkpoint
+class_name: LegacyCheckpoint
+validation_operator_name:
+batches:
+  - batch_kwargs:
+      table: ods_traffic
+      schema: asamoilov
+      data_asset_name: asamoilov.ods_traffic
+      datasource: greenplum
+    expectation_suite_names:
+      - asamoilov.ods_traffic.warning

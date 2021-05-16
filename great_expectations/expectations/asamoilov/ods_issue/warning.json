@@ -1,0 +1,100 @@
+{
+  "data_asset_type": "Dataset",
+  "expectation_suite_name": "asamoilov.ods_issue.warning",
+  "expectations": [
+    {
+      "expectation_type": "expect_table_row_count_to_be_between",
+      "kwargs": {
+        "max_value": 11000,
+        "min_value": 9000
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_table_column_count_to_equal",
+      "kwargs": {
+        "value": 7
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_table_columns_to_match_ordered_list",
+      "kwargs": {
+        "column_list": [
+          "user_id",
+          "start_time",
+          "end_time",
+          "title",
+          "description",
+          "service",
+          "date_part_year"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "user_id"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "start_time"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "title"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "description"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "service"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_distinct_values_to_be_in_set",
+      "kwargs": {
+        "column": "service",
+        "value_set": [
+          "\u0414\u043e\u043c\u0430\u0448\u043d\u0438\u0439 \u0438\u043d\u0442\u0435\u0440\u043d\u0435\u0442",
+          "\u0426\u0438\u0444\u0440\u043e\u0432\u043e\u0435 \u0422\u0412"
+        ]
+      },
+      "meta": {}
+    }
+  ],
+  "meta": {
+    "citations": [
+      {
+        "batch_kwargs": {
+          "data_asset_name": "asamoilov.ods_issue",
+          "datasource": "greenplum",
+          "limit": 1000,
+          "schema": "asamoilov",
+          "table": "ods_issue"
+        },
+        "batch_markers": null,
+        "batch_parameters": null,
+        "citation_date": "20210427T064210.376046Z",
+        "comment": "New suite added via CLI"
+      }
+    ],
+    "great_expectations_version": "0.13.14"
+  }
+}
