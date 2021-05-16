@@ -121,7 +121,7 @@ source_traffic AS (
     GROUP BY st.user_pk, st.billing_year_key
 )
 SELECT
-    su0.billing_year_key
+    su0.billing_year_key,
     su0.legal_type_key,
     su0.district_key,
     su0.billing_mode_key,
