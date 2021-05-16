@@ -121,6 +121,7 @@ source_traffic AS (
     GROUP BY st.user_pk, st.billing_year_key
 )
 SELECT
+    su0.billing_year_key
     su0.legal_type_key,
     su0.district_key,
     su0.billing_mode_key,
@@ -135,7 +136,8 @@ LEFT JOIN source_payment sp0 ON su0.user_pk = sp0.user_pk AND su0.billing_year_k
 LEFT JOIN source_billing sb0 ON su0.user_pk = sb0.user_pk AND su0.billing_year_key = sb0.billing_year_key
 LEFT JOIN source_issue si0 ON su0.user_pk = si0.user_pk AND su0.billing_year_key = si0.billing_year_key
 LEFT JOIN source_traffic st0 ON su0.user_pk = st0.user_pk AND su0.billing_year_key = st0.billing_year_key
-GROUP BY su0.legal_type_key,
+GROUP BY su0.billing_year_key,
+    su0.legal_type_key,
     su0.district_key,
     su0.billing_mode_key,
     su0.registration_year_key,
