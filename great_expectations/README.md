@@ -105,7 +105,7 @@ great_expectations checkpoint run ods_issue
 
 Пример готовых отчетов:
 
-[data_docs.zip]: data_docs.zip
+[data_docs.zip](data_docs.zip)
 
 ## Список проверок для таблиц ODS
 
